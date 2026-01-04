@@ -85,7 +85,7 @@ Large artifacts (for example `police_face_db.sqlite`) are stored with **Git LFS*
 ### 1) Clone and fetch large files (Git LFS)
 ```bash
 git lfs install
-git clone <YOUR_REPO_URL>
+git clone https://github.com/CParaschivDev/AI-Powered-3D-Facial-Recognition-for-Crime-Intelligence-via-Reconstructive-and-Predictive-Methods
 cd AI-Powered-3D-Facial-Recognition-for-Crime-Intelligence-via-Reconstructive-and-Predictive-Methods
 git lfs pull
 ```
