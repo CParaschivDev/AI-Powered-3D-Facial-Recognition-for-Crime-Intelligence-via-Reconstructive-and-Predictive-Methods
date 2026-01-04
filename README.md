@@ -1,6 +1,17 @@
 # An AI-Powered 3D Facial Recognition Framework for Crime Intelligence Using Reconstructive and Predictive Techniques
 **Reconstructive + Predictive Techniques (Prototype)**
 
+<img width="1048" height="773" alt="Login panel" src="https://github.com/user-attachments/assets/e248458d-9825-46cf-93ce-202413a90bfd" />
+<img width="1866" height="824" alt="dashboard1" src="https://github.com/user-attachments/assets/3a9d2442-614c-4bba-aba5-61a64c68eff4" />
+<img width="1889" height="790" alt="dashboard2" src="https://github.com/user-attachments/assets/9cca7a45-1592-472f-85bf-d8f0bb0e185b" />
+<img width="703" height="409" alt="Screenshot 2026-01-04 222012" src="https://github.com/user-attachments/assets/72e4d1bc-20f6-439c-bd4a-6c26a5455115" />
+<img width="343" height="781" alt="uploadsection2" src="https://github.com/user-attachments/assets/c50acfa6-ab22-4ba1-aab2-91a462973ae6" />
+<img width="1879" height="585" alt="DashboardAfterUploadbeendone" src="https://github.com/user-attachments/assets/f48689d1-4e97-4b91-a35c-a4202c21fa1a" />
+<img width="878" height="934" alt="Evidencesection" src="https://github.com/user-attachments/assets/f1367feb-6fed-4f96-9db0-62ed51a2c46c" />
+<img width="1894" height="903" alt="CrimeAnalyticsSection" src="https://github.com/user-attachments/assets/42e3f661-7360-457e-86a7-e6587df79c10" />
+<img width="1848" height="926" alt="CrimeMonthly" src="https://github.com/user-attachments/assets/505bef55-48f5-466c-baee-c80efc0b334b" />
+<img width="1869" height="932" alt="CrimeLSOA" src="https://github.com/user-attachments/assets/193b1c6f-c20a-4bf2-9956-d0699e55edbf" />
+
 This repository contains a full‑stack prototype that brings together **3D face reconstruction**, **face recognition**, and **crime analytics/forecasting** behind a FastAPI backend, with a React frontend for investigation workflows (upload → analyze → report).
 
 Large artifacts (for example `police_face_db.sqlite`) are stored with **Git LFS**.
