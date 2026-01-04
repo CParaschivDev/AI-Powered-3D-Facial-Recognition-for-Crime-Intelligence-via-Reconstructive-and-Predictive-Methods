@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Project Timeline - Crime Intelligence System</title>
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js" charset="utf-8"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f5f7fa;
+        }
+        #gantt {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎓 Dissertation Timeline - 3D Facial Recognition for Crime Intelligence</h1>
+    <div id="gantt"></div>
+    
+    <script>
+        // Dissertation timeline based on actual project phases
+        const tasks = [
+            // Phase 1: Literature Review & Research Design
+            {
+                Task: 'Literature Review - 3D Facial Recognition',
+                Start: '2025-10-05',
+                Finish: '2025-10-18',
+                Phase: 'Research'
+            },
+            {
+                Task: 'Literature Review - Crime Intelligence',
+                Start: '2025-10-12',
+                Finish: '2025-10-25',
+                Phase: 'Research'
+            },
+            {
+                Task: 'Research Methodology & Framework Design',
+                Start: '2025-10-19',
+                Finish: '2025-11-01',
+                Phase: 'Research'
+            },
+            
+            // Phase 2: Data Collection & Preparation
+            {
+                Task: 'FaceScrub Dataset (530 classes, 43,124 images)',
+                Start: '2025-10-26',
+                Finish: '2025-11-05',
+                Phase: 'Data Preparation'
+            },
+            {
+                Task: 'AFLW2000-3D Dataset (2,000 3D landmarks)',
+                Start: '2025-11-02',
+                Finish: '2025-11-09',
+                Phase: 'Data Preparation'
+            },
+            {
+                Task: 'UK Police Crime Data (CSV to Parquet)',
+                Start: '2025-11-06',
+                Finish: '2025-11-13',
+                Phase: 'Data Preparation'
+            },
+            
+            // Phase 3: Model Development & Training
+            {
+                Task: 'LandmarkNet (68-point CNN, MSE loss)',
+                Start: '2025-11-10',
+                Finish: '2025-11-22',
+                Phase: 'ML Training'
+            },
+            {
+                Task: 'RecognitionNet (530-class, Cross-Entropy)',
+                Start: '2025-11-16',
+                Finish: '2025-11-29',
+                Phase: 'ML Training'
+            },
+            {
+                Task: 'ReconstructionNet (FLAME 3DMM parameters)',
+                Start: '2025-11-23',
+                Finish: '2025-12-06',
+                Phase: 'ML Training'
+            },
+            {
+                Task: 'YOLOv8s Integration (weapon detection)',
+                Start: '2025-11-30',
+                Finish: '2025-12-07',
+                Phase: 'ML Training'
+            },
+            
+            // Phase 4: System Implementation
+            {
+                Task: 'FastAPI Backend (JWT/RBAC, audit logs)',
+                Start: '2025-12-01',
+                Finish: '2025-12-13',
+                Phase: 'Backend'
+            },
+            {
+                Task: 'Prophet Crime Forecasting Integration',
+                Start: '2025-12-08',
+                Finish: '2025-12-15',
+                Phase: 'Backend'
+            },
+            {
+                Task: 'React Dashboard (Upload, Analytics, 3D Viz)',
+                Start: '2025-12-14',
+                Finish: '2025-12-27',
+                Phase: 'Frontend'
+            },
+            
+            // Phase 5: Evaluation & Ethics
+            {
+                Task: 'Model Evaluation (accuracy, embedding quality)',
+                Start: '2025-12-20',
+                Finish: '2025-12-30',
+                Phase: 'Evaluation'
+            },
+            {
+                Task: 'Bias Monitoring (FaceScrub gender analysis)',
+                Start: '2025-12-28',
+                Finish: '2026-01-04',
+                Phase: 'Evaluation'
+            },
+            {
+                Task: 'DPIA & Security Audit',
+                Start: '2026-01-02',
+                Finish: '2026-01-06',
+                Phase: 'Evaluation'
+            }
+        ];
+        
+        // Define color scheme for dissertation phases
+        const phaseColors = {
+            'Research': '#3498db',           // Blue
+            'Data Preparation': '#9b59b6',   // Purple
+            'ML Training': '#e74c3c',        // Red
+            'Backend': '#2ecc71',            // Green
+            'Frontend': '#f39c12',           // Orange
+            'Evaluation': '#1abc9c'          // Turquoise
+        };
+        
+        // Create Gantt chart data
+        const data = tasks.map(task => {
+            const start = new Date(task.Start);
+            const finish = new Date(task.Finish);
+            const days = Math.round((finish - start) / (1000 * 60 * 60 * 24));
+            
+            const startLabel = task.Start.slice(8) + '.' + task.Start.slice(5,7);  // e.g., "05.10"
+            const endLabel = task.Finish.slice(8) + '.' + task.Finish.slice(5,7);   // e.g., "19.10"
+            const rangeLabel = startLabel + ' - ' + endLabel;                        // e.g., "05.10 - 19.10"
+            
+            return {
+                x: [task.Start, task.Finish],
+                y: [task.Task, task.Task],
+                mode: 'lines+text',
+                type: 'scatter',
+                line: {
+                    color: phaseColors[task.Phase],
+                    width: 25
+                },
+                name: task.Phase,
+                legendgroup: task.Phase,
+                showlegend: tasks.findIndex(t => t.Phase === task.Phase) === tasks.indexOf(task),
+                hovertemplate: '<b>%{y}</b><br>' +
+                               'Phase: ' + task.Phase + '<br>' +
+                               'Start: ' + task.Start + '<br>' +
+                               'End: ' + task.Finish + '<br>' +
+                               'Duration: ' + days + ' days<br>' +
+                               '<extra></extra>',
+                text: [rangeLabel, days + ' days', ''],
+                textposition: ['middle left', 'middle center', 'middle right'],
+                textfont: [
+                    {color: 'black', size: 9, family: 'Arial'},
+                    {color: 'white', size: 11, family: 'Arial', weight: 'bold'},
+                    {color: 'black', size: 9, family: 'Arial'}
+                ]
+            };
+        });
+        
+        // Layout configuration
+        const layout = {
+            title: {
+                text: 'Dissertation Project Timeline: 5 Oct 2025 → 6 Jan 2026<br><sub>An AI-Powered 3D Facial Recognition System for Crime Intelligence Using Reconstructive and Predictive Techniques</sub>',
+                font: {
+                    size: 22,
+                    family: 'Segoe UI, sans-serif',
+                    color: '#2c3e50',
+                    weight: 'bold'
+                }
+            },
+            xaxis: {
+                title: {
+                    text: 'Timeline: 5 Oct 2025 → 6 Jan 2026',
+                    font: { size: 14, weight: 'bold' }
+                },
+                type: 'date',
+                tickformat: '%d %b %Y',
+                tickfont: { size: 12 },
+                gridcolor: '#ecf0f1',
+                showgrid: true,
+                range: ['2025-10-01', '2026-01-10'],
+                dtick: 604800000, // 1 week in milliseconds
+                tickangle: -45
+            },
+            yaxis: {
+                title: '',
+                autorange: 'reversed',
+                tickfont: { size: 11 },
+                gridcolor: '#ecf0f1',
+                showgrid: true
+            },
+            barmode: 'overlay',
+            legend: {
+                title: {
+                    text: '<b>Project Phases</b>',
+                    font: { size: 14 }
+                },
+                font: { size: 12 },
+                orientation: 'v',
+                x: 1.02,
+                y: 1,
+                bgcolor: 'rgba(255,255,255,0.9)',
+                bordercolor: '#bdc3c7',
+                borderwidth: 1,
+                traceorder: 'normal'
+            },
+            hovermode: 'closest',
+            plot_bgcolor: '#ffffff',
+            paper_bgcolor: '#f5f7fa',
+            margin: { l: 420, r: 180, t: 120, b: 120 },
+            height: 800,
+            font: { family: 'Segoe UI, sans-serif' },
+            shapes: [
+                // Start date marker
+                {
+                    type: 'line',
+                    x0: '2025-10-05',
+                    x1: '2025-10-05',
+                    y0: 0,
+                    y1: 1,
+                    yref: 'paper',
+                    line: {
+                        color: 'green',
+                        width: 2,
+                        dash: 'dot'
+                    }
+                },
+                // End date marker
+                {
+                    type: 'line',
+                    x0: '2026-01-06',
+                    x1: '2026-01-06',
+                    y0: 0,
+                    y1: 1,
+                    yref: 'paper',
+                    line: {
+                        color: 'red',
+                        width: 2,
+                        dash: 'dot'
+                    }
+                }
+            ],
+            annotations: [
+                {
+                    x: '2025-10-05',
+                    y: 1.05,
+                    yref: 'paper',
+                    text: '<b>START: 5 Oct 2025</b>',
+                    showarrow: false,
+                    font: {
+                        color: 'green',
+                        size: 13,
+                        weight: 'bold'
+                    },
+                    xanchor: 'left'
+                },
+                {
+                    x: '2026-01-06',
+                    y: 1.05,
+                    yref: 'paper',
+                    text: '<b>END: 6 Jan 2026</b>',
+                    showarrow: false,
+                    font: {
+                        color: 'red',
+                        size: 13,
+                        weight: 'bold'
+                    },
+                    xanchor: 'right'
+                }
+            ]
+        };
+        
+        const config = {
+            responsive: true,
+            displayModeBar: true,
+            displaylogo: false,
+            modeBarButtonsToRemove: ['lasso2d', 'select2d'],
+            toImageButtonOptions: {
+                format: 'png',
+                filename: 'crime_intelligence_timeline',
+                height: 700,
+                width: 1200,
+                scale: 2
+            }
+        };
+        
+        Plotly.newPlot('gantt', data, layout, config);
+    </script>
+</body>
+</html>

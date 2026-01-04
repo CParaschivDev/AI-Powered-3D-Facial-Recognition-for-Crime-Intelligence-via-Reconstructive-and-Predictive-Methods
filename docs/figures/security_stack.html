@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Security & Governance Stack</title>
+  <style>
+    body { font-family: Inter, Arial, Helvetica, sans-serif; background: #fff; color: #111; padding: 22px; }
+    h1 { font-size: 18px; margin-bottom: 6px }
+    .note { font-size: 12px; color: #555; margin-bottom: 12px }
+    svg { width: 100%; max-width: 1200px; border-radius:6px; background: #fbfdff; }
+    .box { fill: #ffffff; stroke: #e6f0fb; stroke-width: 1.6; rx: 8; }
+    .shadow { filter: drop-shadow(0 6px 18px rgba(34,40,49,0.06)); }
+    .col-label { font-weight: 700; font-size: 13px; fill:#233044 }
+    .node-label { font-size: 13px; fill:#1f2a37 }
+    .small { font-size:11px; fill:#586270 }
+    .arrow-label { font-size: 12px; fill: #2b2f36 }
+    .component { fill:#eef9f5; stroke:#cfeee2; }
+    .sub { fill:#fffaf0; stroke:#f6e9c9; }
+    .sub.small { fill:#f7f7f7; stroke:#e6e6e6; }
+    .resource { fill:#fff7f7; stroke:#fde6e6; }
+    .role circle { fill:#2b7cff }
+    .legend { font-size:12px; fill:#253044 }
+  </style>
+</head>
+<body>
+  <h1>Security & Governance Stack — High-level view</h1>
+  <div class="note">Open this file in a browser. No installation required — copy the SVG into documentation or export as an image.</div>
+
+  <svg viewBox="0 0 1200 480" role="img" aria-label="Security governance stack diagram">
+    <!-- Column titles -->
+    <text x="150" y="44" class="col-label">Users & Roles</text>
+    <text x="600" y="44" class="col-label">FastAPI + RBAC</text>
+    <text x="1030" y="44" class="col-label">Protected Resources</text>
+
+    <!-- USERS -->
+    <g id="users">
+      <rect class="box shadow" x="70" y="76" width="260" height="280"/>
+      <text x="200" y="104" text-anchor="middle" class="node-label" style="font-weight:700">Users & Roles</text>
+
+      <g transform="translate(110,140)">
+        <circle cx="0" cy="0" r="6" class="role" />
+        <text x="22" y="4" class="node-label">Admin</text>
+      </g>
+      <g transform="translate(110,180)">
+        <circle cx="0" cy="0" r="6" class="role" />
+        <text x="22" y="4" class="node-label">Analyst</text>
+      </g>
+      <g transform="translate(110,220)">
+        <circle cx="0" cy="0" r="6" class="role" />
+        <text x="22" y="4" class="node-label">Operator</text>
+      </g>
+      <g transform="translate(110,260)">
+        <circle cx="0" cy="0" r="6" class="role" />
+        <text x="22" y="4" class="node-label">Auditor</text>
+      </g>
+    </g>
+
+    <!-- API / RBAC -->
+    <g id="api">
+      <rect class="box shadow" x="420" y="64" width="360" height="320"/>
+      <text x="600" y="96" text-anchor="middle" class="node-label" style="font-weight:700">FastAPI + RBAC</text>
+
+      <rect class="component" x="470" y="132" width="280" height="56" rx="10"/>
+      <text x="610" y="164" text-anchor="middle" class="node-label" style="font-weight:700">API</text>
+
+      <rect class="sub" x="470" y="206" width="280" height="44" rx="8"/>
+      <text x="610" y="232" text-anchor="middle" class="node-label">AuthN — IdP / OAuth2 / OIDC → JWT</text>
+
+      <rect class="sub" x="470" y="260" width="280" height="44" rx="8"/>
+      <text x="610" y="286" text-anchor="middle" class="node-label">AuthZ — RBAC policy check</text>
+
+      <rect class="sub small" x="470" y="314" width="280" height="36" rx="8"/>
+      <text x="610" y="336" text-anchor="middle" class="node-label">AuditLog writer</text>
+    </g>
+
+    <!-- RESOURCES -->
+    <g id="resources">
+      <rect class="box shadow" x="920" y="68" width="240" height="300"/>
+      <text x="1040" y="96" text-anchor="middle" class="node-label" style="font-weight:700">Protected resources</text>
+
+      <rect class="resource" x="940" y="130" width="200" height="56" rx="8"/>
+      <text x="1040" y="158" text-anchor="middle" class="node-label">Evidence store</text>
+      <text x="1040" y="174" text-anchor="middle" class="small">(encrypted object storage)</text>
+
+      <rect class="resource" x="940" y="204" width="200" height="64" rx="8"/>
+      <text x="1040" y="228" text-anchor="middle" class="node-label">PostgreSQL</text>
+      <text x="1040" y="244" text-anchor="middle" class="small">
+        <tspan x="1040" dy="0">Evidence, Snapshot, Prediction</tspan>
+        <tspan x="1040" dy="14">ModelVersion, AuditLog, BiasMetrics</tspan>
+      </text>
+
+      <rect class="resource" x="940" y="284" width="200" height="56" rx="8"/>
+      <text x="1040" y="312" text-anchor="middle" class="node-label">Logs & Monitoring</text>
+      <text x="1040" y="328" text-anchor="middle" class="small">ELK/Opensearch, Prometheus, Jaeger</text>
+    </g>
+
+    <!-- Markers and arrows -->
+    <defs>
+      <linearGradient id="gradA" x1="0" x2="1">
+        <stop offset="0%" stop-color="#6c5ce7"/>
+        <stop offset="100%" stop-color="#8e44ad"/>
+      </linearGradient>
+      <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+        <path d="M 0 0 L 10 5 L 0 10 z" fill="#233044" />
+      </marker>
+    </defs>
+
+    <!-- Users -> API (TLS + JWT) -->
+    <g stroke="#2b3a45" stroke-width="2.2" fill="none" marker-end="url(#arrow)">
+      <path d="M 330 150 C 420 150 480 148 470 160" />
+      <text x="400" y="138" class="arrow-label" text-anchor="middle">TLS + JWT</text>
+
+      <path d="M 330 190 C 420 190 480 190 470 200" />
+      <text x="400" y="178" class="arrow-label" text-anchor="middle">TLS + JWT</text>
+
+      <path d="M 330 230 C 420 230 480 232 470 240" />
+      <text x="400" y="218" class="arrow-label" text-anchor="middle">TLS + JWT</text>
+
+      <path d="M 330 270 C 420 270 480 274 470 280" />
+      <text x="400" y="258" class="arrow-label" text-anchor="middle">TLS + JWT</text>
+    </g>
+
+    <!-- API -> Resources (encryption, logs) -->
+    <g stroke="url(#gradA)" stroke-width="2.0" fill="none" marker-end="url(#arrow)">
+      <!-- endpoints moved slightly left so labels don't overlap resource boxes -->
+      <path d="M 740 160 C 820 160 880 160 900 166" />
+      <text x="820" y="146" class="arrow-label" text-anchor="middle" style="font-size:11px">AES-256 at rest / envelope encryption</text>
+
+      <path d="M 740 240 C 820 240 880 240 900 236" />
+      <text x="820" y="226" class="arrow-label" text-anchor="middle" style="font-size:11px">AES-256 at rest / envelope encryption</text>
+
+      <path d="M 740 320 C 820 320 880 320 900 316" />
+      <text x="820" y="304" class="arrow-label" text-anchor="middle" style="font-size:11px">Redacted JSON logs</text>
+    </g>
+
+    <!-- AuditLog -> Logs -->
+    <g stroke="#6b7784" stroke-dasharray="6 3" stroke-width="1.6" fill="none" marker-end="url(#arrow)">
+      <path d="M 610 338 C 720 338 840 338 940 338" />
+      <text x="780" y="352" class="arrow-label" text-anchor="middle">Redacted audit records</text>
+    </g>
+
+    <!-- Legend -->
+    <g>
+      <rect x="40" y="380" width="1120" height="70" rx="8" fill="#ffffff" stroke="#eef5fb"/>
+      <text x="60" y="404" class="legend" style="font-weight:700">Legend:</text>
+      <text x="140" y="404" class="legend">TLS + JWT — secure transport and token authentication;</text>
+      <text x="460" y="404" class="legend">AES-256 at rest / envelope encryption — disk/object encryption;</text>
+      <text x="820" y="404" class="legend">Redacted JSON logs — PII removed before export.</text>
+    </g>
+
+  </svg>
+
+  <p style="margin-top:12px;font-size:12px;color:#444">Tip: open this file in a browser or include the SVG in your documentation. To convert to PNG, open the file and export as PNG from the browser or take a screenshot.</p>
+</body>
+</html>

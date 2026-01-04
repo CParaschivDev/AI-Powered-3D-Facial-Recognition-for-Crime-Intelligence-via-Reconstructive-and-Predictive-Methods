@@ -1,0 +1,49 @@
+digraph G {
+	fontsize=12 rankdir=LR
+	node [fillcolor="#f5f5f5" fontname=Helvetica shape=rect style=filled]
+	subgraph cluster_users {
+		color="#2b7cff" label="Users & Roles"
+		Admin [fillcolor="#dbeeff"]
+		Analyst [fillcolor="#dbeeff"]
+		Operator [fillcolor="#dbeeff"]
+		Auditor [fillcolor="#dbeeff"]
+	}
+	subgraph cluster_api {
+		color="#2ecc71" label="FastAPI + RBAC"
+		API [fillcolor="#e8f8f0" shape=component]
+		"AuthN
+(IdP / OAuth2 / OIDC)"
+		"AuthZ
+(RBAC policy)"
+		"AuditLog
+(writer)"
+		API -> "AuthN
+(IdP / OAuth2 / OIDC)" [color="#2ecc71" style=dashed]
+		API -> "AuthZ
+(RBAC policy)" [color="#2ecc71" style=dashed]
+		API -> "AuditLog
+(writer)" [color="#7f8c8d" style=dotted]
+	}
+	subgraph cluster_resources {
+		color="#e67e22" label="Protected resources"
+		"Evidence
+(Encrypted object store)" [fillcolor="#fff3e0"]
+		"PostgreSQL
+(Evidence, Snapshots, Predictions, ModelVersion, AuditLog, BiasMetrics)" [fillcolor="#fff3e0"]
+		"Logs + Monitoring
+(ELK/Opensearch, Prometheus, Jaeger)" [fillcolor="#fff3e0"]
+	}
+	Admin -> API [label="TLS + JWT" color="#34495e"]
+	Analyst -> API [label="TLS + JWT" color="#34495e"]
+	Operator -> API [label="TLS + JWT" color="#34495e"]
+	Auditor -> API [label="TLS + JWT" color="#34495e"]
+	API -> "Evidence
+(Encrypted object store)" [label="AES-256 at rest / envelope encryption" color="#8e44ad"]
+	API -> "PostgreSQL
+(Evidence, Snapshots, Predictions, ModelVersion, AuditLog, BiasMetrics)" [label="AES-256 at rest / envelope encryption" color="#8e44ad"]
+	API -> "Logs + Monitoring
+(ELK/Opensearch, Prometheus, Jaeger)" [label="Redacted JSON logs" color="#c0392b"]
+	"AuditLog
+(writer)" -> "Logs + Monitoring
+(ELK/Opensearch, Prometheus, Jaeger)" [label="Redacted audit records" color="#7f8c8d" style=dashed]
+}

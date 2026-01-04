@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="320" viewBox="0 0 940 320">
+  <style>
+    .box{fill:#ffffff;stroke:#333;stroke-width:2;rx:8}
+    .title{font:600 14px/1.1 'Helvetica Neue', Arial, sans-serif;fill:#111}
+    .sub{font:12px/1.1 'Helvetica Neue', Arial, sans-serif;fill:#444}
+    .label{font:11px/1.1 'Helvetica Neue', Arial, sans-serif;fill:#666}
+    .arrow{stroke:#333;stroke-width:2;fill:none;marker-end:url(#a)}
+    .muted{stroke:#777;stroke-dasharray:6 5}
+  </style>
+  <defs>
+    <marker id="a" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L9,4 L0,8 z" fill="#333" />
+    </marker>
+  </defs>
+
+  <!-- Top row boxes (aligned) -->
+  <g>
+    <rect x="24" y="40" width="160" height="80" class="box" />
+    <text x="104" y="72" class="title" text-anchor="middle">Query image</text>
+    <text x="104" y="94" class="label" text-anchor="middle">uploaded / camera frame</text>
+  </g>
+
+  <g>
+    <rect x="208" y="40" width="220" height="80" class="box" />
+    <text x="318" y="72" class="title" text-anchor="middle">RecognitionNet</text>
+    <text x="318" y="94" class="sub" text-anchor="middle">training/recognition_train.py</text>
+    <text x="318" y="112" class="label" text-anchor="middle">embed()</text>
+  </g>
+
+  <g>
+    <rect x="468" y="50" width="160" height="60" class="box" />
+    <text x="548" y="78" class="title" text-anchor="middle">Embedding</text>
+    <text x="548" y="98" class="label" text-anchor="middle">512-D vector (L2 norm)</text>
+  </g>
+
+  <g>
+    <rect x="668" y="36" width="240" height="96" class="box" />
+    <text x="788" y="66" class="title" text-anchor="middle">Watchlist index</text>
+    <text x="788" y="90" class="sub" text-anchor="middle">ANN / cosine search</text>
+    <text x="788" y="108" class="label" text-anchor="middle">police_face_db.sqlite or index</text>
+  </g>
+
+  <!-- Top row arrows (straight, centered into boxes) -->
+  <path class="arrow" d="M184 80 L208 80" />
+  <path class="arrow" d="M428 80 L468 80" />
+  <path class="arrow muted" d="M628 80 L668 80" marker-end="url(#a)" />
+
+  <!-- Outputs: Top-K and Threshold (aligned) -->
+  <g>
+    <rect x="176" y="206" width="220" height="74" class="box" />
+    <text x="286" y="234" class="title" text-anchor="middle">Top-K candidates</text>
+    <text x="286" y="254" class="label" text-anchor="middle">IDs + scores (cosine)</text>
+  </g>
+
+  <g>
+    <rect x="484" y="206" width="220" height="74" class="box" />
+    <text x="594" y="234" class="title" text-anchor="middle">Threshold</text>
+    <text x="594" y="254" class="label" text-anchor="middle">τ (accept / review)</text>
+  </g>
+
+      <!-- Smooth routed connectors from Watchlist index to outputs (curved, non-overlapping)
+        Curves now end at the top-centers of the target boxes so arrowheads align with the box edges. -->
+      <path class="arrow" d="M748 132 C700 160 520 170 286 206" marker-end="url(#a)" />
+      <path class="arrow" d="M748 132 C820 160 700 170 594 206" marker-end="url(#a)" />
+
+  <!-- small arrow from embedding to watchlist (muted) -->
+  <path class="muted" d="M628 80 L668 80" marker-end="url(#a)" />
+
+  <!-- Caption -->
+  <text x="470" y="306" class="label" text-anchor="middle">Figure: Watchlist search — embedding → ANN index → top-K candidates + threshold τ</text>
+</svg>

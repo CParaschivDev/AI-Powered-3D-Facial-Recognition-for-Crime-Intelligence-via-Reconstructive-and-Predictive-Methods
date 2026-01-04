@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="360" viewBox="0 0 1400 360">
+  <style>
+    .box { fill:#fbfbfc; stroke:#333; stroke-width:2; rx:10; }
+    .title { font: 600 16px/1.1 'Helvetica Neue', Arial, sans-serif; fill:#111; }
+    .sub { font: 13px/1.1 'Helvetica Neue', Arial, sans-serif; fill:#444; }
+    .label { font: 12px/1.1 italic 'Helvetica Neue', Arial, sans-serif; fill:#666; }
+    .arrow { stroke:#333; stroke-width:2.4; fill:none; marker-end:url(#arrowhead);} 
+    .thin { stroke-width:1.6; }
+    .dashed { stroke-dasharray:7 5; stroke:#777; }
+    .path-label { font: 11px/1.1 'Helvetica Neue', Arial, sans-serif; fill:#666; }
+  </style>
+  <defs>
+    <!-- small, crisp arrowhead that aligns with stroke width -->
+    <marker id="arrowhead" markerUnits="strokeWidth" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L9,4 L0,8 z" fill="#333" />
+    </marker>
+    <marker id="arrowhead-muted" markerUnits="strokeWidth" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L9,4 L0,8 z" fill="#777" />
+    </marker>
+    <!-- reversed arrowhead for left-pointing arrows (uses same marker but path direction handles orientation) -->
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.12"/>
+    </filter>
+  </defs>
+
+  <!-- Input -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="60" width="180" height="100" class="box" />
+    <text x="130" y="96" class="title" text-anchor="middle">Input frame</text>
+    <text x="130" y="122" class="sub" text-anchor="middle">uploaded image</text>
+    <text x="130" y="144" class="label" text-anchor="middle">(raw)</text>
+  </g>
+
+  <!-- Main horizontal boxes -->
+  <!-- Positions: x values chosen for even spacing -->
+  <!-- YOLO -->
+  <g transform="translate(260,40)" filter="url(#shadow)">
+    <rect x="0" y="20" width="200" height="100" class="box" />
+    <text x="100" y="60" class="title" text-anchor="middle">YOLOv8s</text>
+    <text x="100" y="84" class="sub" text-anchor="middle">yolo_detector.py</text>
+    <text x="100" y="106" class="label" text-anchor="middle">bboxes</text>
+  </g>
+
+  <!-- Crime-scene processor -->
+  <g transform="translate(500,40)" filter="url(#shadow)">
+    <rect x="0" y="20" width="200" height="100" class="box" />
+    <text x="100" y="60" class="title" text-anchor="middle">Crime-scene</text>
+    <text x="100" y="84" class="sub" text-anchor="middle">processor.py</text>
+    <text x="100" y="106" class="label" text-anchor="middle">aligned crop</text>
+  </g>
+
+  <!-- LandmarkNet -->
+  <g transform="translate(740,40)" filter="url(#shadow)">
+    <rect x="0" y="20" width="200" height="100" class="box" />
+    <text x="100" y="60" class="title" text-anchor="middle">LandmarkNet</text>
+    <text x="100" y="84" class="sub" text-anchor="middle">training/landmark_train.py</text>
+    <text x="100" y="106" class="label" text-anchor="middle">landmarks</text>
+  </g>
+
+  <!-- Alignment -->
+  <g transform="translate(980,40)" filter="url(#shadow)">
+    <rect x="0" y="20" width="160" height="100" class="box" />
+    <text x="80" y="64" class="title" text-anchor="middle">Alignment</text>
+    <text x="80" y="98" class="label" text-anchor="middle">aligned crop</text>
+  </g>
+
+  <!-- Reconstruction -->
+  <g transform="translate(1180,40)" filter="url(#shadow)">
+    <rect x="0" y="20" width="200" height="100" class="box" />
+    <text x="100" y="60" class="title" text-anchor="middle">ReconstructionNet</text>
+    <text x="100" y="84" class="sub" text-anchor="middle">training/reconstruction_train.py</text>
+    <text x="100" y="106" class="label" text-anchor="middle">3-D params</text>
+  </g>
+
+  <!-- Lower row: Recognition and Storage -->
+  <g transform="translate(420,200)" filter="url(#shadow)">
+    <rect x="0" y="0" width="300" height="100" class="box" />
+    <text x="150" y="30" class="title" text-anchor="middle">RecognitionNet</text>
+    <text x="150" y="56" class="sub" text-anchor="middle">training/recognition_train.py</text>
+    <text x="150" y="84" class="label" text-anchor="middle">512-D embedding</text>
+  </g>
+
+  <g transform="translate(760,200)" filter="url(#shadow)">
+    <rect x="0" y="0" width="360" height="100" class="box" />
+    <text x="180" y="30" class="title" text-anchor="middle">Embedding storage</text>
+    <text x="180" y="56" class="sub" text-anchor="middle">police_face_db.sqlite / PostgreSQL</text>
+    <text x="180" y="84" class="label" text-anchor="middle">stored vectors</text>
+  </g>
+
+
+  <!-- Arrows: top row flow (endpoints match box edges) -->
+  <path class="arrow" stroke-linecap="round" d="M220 110 L260 110" />
+  <path class="arrow" stroke-linecap="round" d="M460 110 L500 110" />
+  <path class="arrow" stroke-linecap="round" d="M700 110 L740 110" />
+  <path class="arrow" stroke-linecap="round" d="M940 110 L980 110" />
+  <path class="arrow" stroke-linecap="round" d="M1160 110 L1180 110" />
+
+  <!-- Arrow from Reconstruction down to Embedding storage: smooth routed curve to storage left-center -->
+  <!-- Reconstruction box right-mid: (1380,110). Storage left-center: x=760, y=250 -->
+  <path id="recon_to_storage" class="arrow thin dashed" stroke-linecap="round" stroke-linejoin="round" d="M1380 110 C1380 170 1080 170 980 210 C860 250 800 250 760 250" marker-end="url(#arrowhead-muted)" />
+  <!-- label on the curved path -->
+  <text class="path-label">
+    <textPath href="#recon_to_storage" startOffset="60%" text-anchor="middle">3-D params</textPath>
+  </text>
+
+  <!-- Arrow from Recognition to Embedding storage: small rightward arrow into storage left edge -->
+  <!-- Recognition right edge: x=720, y=250. Storage left edge: x=760, y=250 -->
+  <path id="rec_to_storage" class="arrow thin dashed" stroke-linecap="round" d="M720 250 L760 250" marker-end="url(#arrowhead-muted)" />
+
+  <!-- Arrow from Alignment to Reconstruction (top row) already implied by top arrows -->
+
+  <!-- Caption -->
+  <text x="700" y="340" class="sub" text-anchor="middle">Figure: Facial analytics pipeline — detection → landmarks → alignment → reconstruction → recognition → storage</text>
+</svg>

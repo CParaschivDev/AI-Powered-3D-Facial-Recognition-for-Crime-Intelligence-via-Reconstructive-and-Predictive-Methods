@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Concept Map: Law-Enforcement Facial Analysis Ecosystem</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { 
+            margin: 0; 
+            padding: 24px; 
+            font-family: -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; 
+            background: #1a1a1a; 
+            color: #e0e0e0; 
+        }
+        .container { 
+            max-width: 100%; 
+            margin: 0 auto; 
+            background: #2a2a2a;
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+        h1 {
+            color: #ffffff;
+            font-size: 32px;
+            margin-bottom: 24px;
+            text-align: center;
+            border-bottom: 2px solid #4a4a4a;
+            padding-bottom: 16px;
+        }
+        .mermaid { 
+            overflow: auto; 
+            background: #ffffff;
+            padding: 32px;
+            border-radius: 8px;
+            min-height: 600px;
+            margin: 24px 0;
+        }
+        .caption { 
+            margin-top: 16px; 
+            color: #b0b0b0; 
+            font-size: 16px;
+            line-height: 1.6;
+            text-align: center;
+            padding: 16px;
+            background: #333;
+            border-radius: 8px;
+        }
+        .legend { 
+            margin-top: 16px; 
+            font-size: 16px; 
+            color: #b0b0b0; 
+            text-align: center;
+            padding: 16px;
+            background: #333;
+            border-radius: 8px;
+        }
+        .legend span { 
+            display: inline-block; 
+            padding: 8px 16px; 
+            border-radius: 6px; 
+            margin: 4px 8px; 
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .chip-store { background:#eef; border:2px solid #668; color: #334; }
+        .chip-compute { background:#f5f5ff; border:2px solid #5a56e0; color: #2a2885; }
+        .chip-service { background:#e8f8ff; border:2px solid #1282a2; color: #0d3b66; }
+        .chip-guard { background:#ffe8cc; border:2px solid #b35b00; color: #4d2e00; }
+        .chip-analytics { background:#e8ffe8; border:2px solid #2d862d; color: #1a4d1a; }
+        .components {
+            margin-top: 16px; 
+            font-size: 15px; 
+            color: #d0d0d0; 
+            line-height: 1.8;
+            background: #333;
+            padding: 24px;
+            border-radius: 8px;
+        }
+        .components strong {
+            color: #4a9eff;
+        }
+    </style>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            securityLevel: 'loose', 
+            flowchart: { 
+                htmlLabels: true, 
+                useMaxWidth: false,
+                curve: 'basis'
+            }, 
+            fontFamily: 'Segoe UI, Roboto, Arial, sans-serif',
+            theme: 'default'
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Concept Map: Law-Enforcement Facial Analysis Ecosystem</h1>
+        <div class="mermaid">
+graph TB
+    subgraph input[INPUT DATA]
+        A[Training Data<br/>FaceScrub + AFLW2000-3D]
+        D[Crime Scene Evidence<br/>Images + Videos]
+        G[UK Police Crime Data<br/>CSV Files]
+    end
+    
+    subgraph ml[MACHINE LEARNING]
+        B[3 Custom CNNs<br/>Recognition + Reconstruction + Landmark]
+        C[Buffalo InsightFace<br/>Baseline Comparison Only]
+        E[YOLOv8s<br/>Weapon Detection]
+    end
+    
+    subgraph processing[PROCESSING LAYER]
+        F[Face Processing<br/>Detection + Cropping]
+        H[Prophet Forecasting<br/>Crime Predictions]
+        J[Scene Analysis<br/>Intelligence Agent]
+    end
+    
+    subgraph backend[BACKEND SERVICES]
+        K[FastAPI<br/>8 Routes]
+        I[Model Storage<br/>Trained Weights]
+        L[PostgreSQL<br/>Evidence + Users]
+    end
+    
+    subgraph frontend[USER INTERFACE]
+        M[React Frontend<br/>Login + Dashboard + Upload + Analytics]
+    end
+    
+    A --> B
+    A -.-> C
+    D --> E
+    D --> F
+    G --> H
+    
+    B --> I
+    E --> J
+    F --> J
+    H --> K
+    J --> K
+    I --> K
+    
+    K --> L
+    K --> M
+    
+    style A fill:#bbdefb
+    style D fill:#bbdefb
+    style G fill:#bbdefb
+    style B fill:#e1bee7
+    style C fill:#ffe0b2,stroke-dasharray: 5 5
+    style E fill:#c8e6c9
+    style F fill:#c8e6c9
+    style H fill:#c8e6c9
+    style J fill:#c8e6c9
+    style I fill:#b2dfdb
+    style K fill:#fff9c4
+    style L fill:#b2dfdb
+    style M fill:#f8bbd0
+        </div>
+        <div class="caption"><strong>System Flow:</strong> Training Data trains 3 Custom CNNs (+ Buffalo for comparison) → Crime Scene Evidence processed by YOLO + Face Detection → UK Crime Data feeds Prophet Forecasting → All flows through FastAPI Backend → Stored in PostgreSQL → Displayed in React Frontend</div>
+        <div class="legend">
+            <span class="chip-store">Input Data (Blue)</span>
+            <span class="chip-compute">Machine Learning (Purple/Orange)</span>
+            <span class="chip-service">Processing Services (Green)</span>
+            <span class="chip-analytics">Backend Storage (Teal/Yellow)</span>
+            <span class="chip-guard">User Interface (Pink)</span>
+        </div>
+        <div class="components">
+            <strong>Key Components:</strong><br/><br/>
+            📊 <strong>3 Custom CNNs:</strong> Recognition (530 classes FaceScrub), Reconstruction (FLAME 3DMM), Landmark (68 points)<br/><br/>
+            🔍 <strong>Buffalo InsightFace:</strong> Baseline comparison only (dashed border), not used in production<br/><br/>
+            🎯 <strong>YOLOv8s:</strong> Weapon detection (knife, baseball bat, person) in crime scenes<br/><br/>
+            📈 <strong>Prophet:</strong> Crime forecasting from UK Police data (real-time predictions, 3-month trends)<br/><br/>
+            🚀 <strong>FastAPI:</strong> 8 routes - /auth, /recognize, /reconstruct, /crime, /analytics, /evidence, /multimodal, /report<br/><br/>
+            💻 <strong>React Frontend:</strong> 4 pages - Login, Dashboard, Upload/Evidence Manager, Crime Analytics
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Training Pipeline - AI Facial Recognition System</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { 
+            margin: 0; 
+            padding: 24px; 
+            font-family: -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; 
+            background: #1a1a1a; 
+            color: #e0e0e0; 
+        }
+        .container { 
+            max-width: 100%; 
+            margin: 0 auto; 
+            background: #2a2a2a;
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+        h1 {
+            color: #ffffff;
+            font-size: 28px;
+            margin-bottom: 24px;
+            text-align: center;
+            border-bottom: 2px solid #4a4a4a;
+            padding-bottom: 16px;
+        }
+        .mermaid { 
+            overflow: auto; 
+            background: #ffffff;
+            padding: 32px;
+            border-radius: 8px;
+            min-height: 600px;
+            margin: 24px 0;
+        }
+        .caption { 
+            margin-top: 16px; 
+            color: #b0b0b0; 
+            font-size: 16px;
+            line-height: 1.6;
+            text-align: center;
+            padding: 16px;
+            background: #333;
+            border-radius: 8px;
+        }
+    </style>
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            securityLevel: 'loose', 
+            flowchart: { 
+                htmlLabels: true, 
+                useMaxWidth: false,
+                curve: 'basis'
+            }, 
+            fontFamily: 'Segoe UI, Roboto, Arial, sans-serif',
+            theme: 'default'
+        });
+    </script>
+</head>
+<body>
+        <h1>Training Pipeline - AI Facial Recognition System</h1>
+        <div class="mermaid">
+graph TB
+    subgraph datasets[TRAINING DATASETS]
+        DS1[FaceScrub Actors<br/>23,215 images]
+        DS2[FaceScrub Actresses<br/>19,932 images]
+        DS3[AFLW2000-3D<br/>2,000 images + landmarks]
+        DS4[UK Police Crime Data]
+        DS5[Test Images]
+    end
+    
+    subgraph training[TRAINING PROCESS]
+        T1[Landmark Training<br/>68 points MSE loss]
+        T2[Recognition Training<br/>530 classes Cross-Entropy]
+        T3[Reconstruction Training<br/>FLAME 3DMM]
+    end
+    
+    subgraph models[TRAINED MODELS]
+        M1[Recognition Model<br/>recognition.pth]
+        M2[Landmark Model<br/>landmark.pth]
+        M3[Reconstruction Model<br/>reconstruction.pth]
+    end
+    
+    subgraph baseline[BASELINE]
+        MB[Buffalo InsightFace<br/>Pre-trained Comparison]
+    end
+    
+    subgraph evaluation[EVALUATION]
+        E1[Landmark Eval<br/>NME CED]
+        E2[Recognition Eval<br/>TAR FAR ROC]
+        E3[Reconstruction Eval<br/>Vertex Error]
+    end
+    
+    subgraph inference[INFERENCE SERVICES]
+        Y[YOLOv8s<br/>Weapon Detection]
+        P[Prophet Forecaster<br/>Crime Predictions]
+    end
+    
+    subgraph deployment[DEPLOYMENT]
+        G[FastAPI Backend<br/>recognize reconstruct analytics]
+        UI[React Frontend<br/>Dashboard Analytics]
+    end
+    
+    DS1 --> T2
+    DS2 --> T2
+    DS3 --> T1
+    DS3 --> T3
+    
+    DS1 -.-> MB
+    DS2 -.-> MB
+    
+    T1 --> M2
+    T2 --> M1
+    T3 --> M3
+    
+    M1 --> E2
+    M2 --> E1
+    M3 --> E3
+    MB -.-> E2
+    
+    E1 --> G
+    E2 --> G
+    E3 --> G
+    DS4 --> P
+    P --> G
+    DS5 --> Y
+    Y --> G
+    
+    G --> UI
+    
+    classDef dataStyle fill:#bbdefb,stroke:#1976d2,stroke-width:2px
+    classDef trainStyle fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
+    classDef modelStyle fill:#e1bee7,stroke:#7b1fa2,stroke-width:2px
+    classDef baselineStyle fill:#ffe0b2,stroke:#f57c00,stroke-width:2px,stroke-dasharray: 5 5
+    classDef evalStyle fill:#fff9c4,stroke:#f9a825,stroke-width:2px
+    classDef inferenceStyle fill:#b2dfdb,stroke:#00796b,stroke-width:2px
+    classDef deployStyle fill:#f8bbd0,stroke:#c2185b,stroke-width:2px
+    
+    class DS1,DS2,DS3,DS4,DS5 dataStyle
+    class T1,T2,T3 trainStyle
+    class M1,M2,M3 modelStyle
+    class MB baselineStyle
+    class E1,E2,E3 evalStyle
+    class Y,P inferenceStyle
+    class G,UI deployStyle
+        </div>
+        <div class="caption">
+            <strong>Complete Pipeline Flow:</strong> Training Datasets (FaceScrub + AFLW2000-3D) → Training Process (3 custom CNNs) → Trained Models (.pth files) → Evaluation (metrics validation) → Deployment (FastAPI + React). <strong>Inference Services:</strong> UK Police Data → Prophet Forecaster → Crime Predictions; Test Images → YOLOv8s → Weapon Detection. Buffalo baseline runs in parallel for comparison only.
+        </div>
+    </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>AI 3D Facial Recognition System - Pipeline Flow</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            padding: 30px;
+            margin-top: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        .legend {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 5px 15px;
+            font-size: 0.9em;
+        }
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI 3D Facial Recognition System - Pipeline Flow</h1>
+        <p class="subtitle">CCTV Frames → YOLO Detection → Custom CNNs (Recognition + Reconstruction + Landmarks) → Crime Intelligence → Analytics</p>
+
+        <div id="sankeyDiagram"></div>
+
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-color" style="background: #4C78A8;"></div>
+                <span>Data Sources</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #72B7B2;"></div>
+                <span>YOLO Detection</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #F58518;"></div>
+                <span>Custom CNNs</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #54A24B;"></div>
+                <span>Crime Intelligence</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #B279A2;"></div>
+                <span>Backend & Storage</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #E45756;"></div>
+                <span>Frontend & Analytics</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Define the nodes (stages in the pipeline)
+        var nodeLabels = [
+            // Input Sources (0-2) - Blue
+            "CCTV Frames",
+            "Uploaded Images",
+            "UK Police Crime Data",
+
+            // YOLO Detection (3-4) - Teal
+            "YOLOv8s Detection",
+            "Person Crops + Weapons",
+
+            // Custom CNNs (5-10) - Orange
+            "RecognitionNet (530 classes)",
+            "LandmarkNet (68 points)",
+            "ReconstructionNet (FLAME 3DMM)",
+            "Identity Embeddings",
+            "3D Landmarks",
+            "3D Mesh",
+
+            // Crime Intelligence (11-13) - Green
+            "Crime Scene Processor",
+            "Crime Intelligence Agent",
+            "Prophet Forecaster",
+
+            // Backend & Storage (14-16) - Purple
+            "FastAPI Backend",
+            "PostgreSQL Database",
+            "Evidence Storage",
+
+            // Frontend & Analytics (17-19) - Red
+            "React Dashboard",
+            "Crime Analytics",
+            "Reports & Insights"
+        ];
+
+        // Define node colors matching the legend
+        var nodeColors = [
+            // Input Sources (Blue)
+            "#4C78A8", "#4C78A8", "#4C78A8",
+
+            // YOLO Detection (Teal)
+            "#72B7B2", "#72B7B2",
+
+            // Custom CNNs (Orange)
+            "#F58518", "#F58518", "#F58518", "#F58518", "#F58518", "#F58518",
+
+            // Crime Intelligence (Green)
+            "#54A24B", "#54A24B", "#54A24B",
+
+            // Backend & Storage (Purple)
+            "#B279A2", "#B279A2", "#B279A2",
+
+            // Frontend & Analytics (Red)
+            "#E45756", "#E45756", "#E45756"
+        ];
+
+        // Define the links (data flow between nodes)
+        var linkSources = [
+            // Input Sources → YOLO Detection
+            0, 1,
+            
+            // YOLO → Person Crops + Weapons
+            3, 3,
+            
+            // Person Crops → Custom CNNs
+            4, 4, 4,
+            
+            // Custom CNNs → Outputs
+            5, 6, 7,
+            
+            // CNN Outputs → Crime Scene Processor
+            8, 9, 10,
+            
+            // Crime Scene Processor → Crime Intelligence Agent
+            11,
+            
+            // UK Crime Data → Prophet Forecaster
+            2,
+            
+            // Crime Intelligence + Prophet → FastAPI Backend
+            12, 13,
+            
+            // FastAPI → PostgreSQL Database
+            14,
+            
+            // Database → Evidence Storage
+            15,
+            
+            // Backend → React Dashboard
+            14, 15,
+            
+            // Dashboard → Crime Analytics
+            17,
+            
+            // Analytics → Reports
+            18
+        ];
+
+        var linkTargets = [
+            // Input Sources → YOLO Detection
+            3, 3,
+            
+            // YOLO → Person Crops + Weapons
+            4, 11,
+            
+            // Person Crops → Custom CNNs
+            5, 6, 7,
+            
+            // Custom CNNs → Outputs
+            8, 9, 10,
+            
+            // CNN Outputs → Crime Scene Processor
+            11, 11, 11,
+            
+            // Crime Scene Processor → Crime Intelligence Agent
+            12,
+            
+            // UK Crime Data → Prophet Forecaster
+            13,
+            
+            // Crime Intelligence + Prophet → FastAPI Backend
+            14, 14,
+            
+            // FastAPI → PostgreSQL Database
+            15,
+            
+            // Database → Evidence Storage
+            16,
+            
+            // Backend → React Dashboard
+            17, 17,
+            
+            // Dashboard → Crime Analytics
+            18,
+            
+            // Analytics → Reports
+            19
+        ];
+
+        var linkValues = [
+            // Input Sources → YOLO
+            60, 40,
+            
+            // YOLO → Person Crops + Weapons
+            80, 20,
+            
+            // Person Crops → 3 Custom CNNs
+            80, 80, 80,
+            
+            // Custom CNNs → Outputs
+            80, 80, 80,
+            
+            // CNN Outputs → Crime Scene Processor
+            80, 80, 80,
+            
+            // Crime Scene Processor → Crime Intelligence Agent
+            100,
+            
+            // UK Crime Data → Prophet
+            100,
+            
+            // Crime Intelligence + Prophet → FastAPI
+            100, 100,
+            
+            // FastAPI → PostgreSQL
+            200,
+            
+            // Database → Evidence Storage
+            200,
+            
+            // Backend → React Dashboard
+            200, 200,
+            
+            // Dashboard → Crime Analytics
+            400,
+            
+            // Analytics → Reports
+            400
+        ];
+
+        var data = [{
+            type: "sankey",
+            orientation: "h",
+            node: {
+                pad: 20,
+                thickness: 30,
+                line: {
+                    color: "rgba(255,255,255,0.5)",
+                    width: 1
+                },
+                label: nodeLabels,
+                color: nodeColors,
+                hovertemplate: '%{label}<extra></extra>'
+            },
+            link: {
+                source: linkSources,
+                target: linkTargets,
+                value: linkValues,
+                color: "rgba(120,120,120,0.4)",
+                hovertemplate: 'Flow: %{value} units<br>Source: %{source.label}<br>Target: %{target.label}<extra></extra>'
+            }
+        }];
+
+        var layout = {
+            title: {
+                text: "3D Facial Recognition System Pipeline",
+                font: { size: 20, color: "#2c3e50" }
+            },
+            font: {
+                size: 11,
+                color: "#34495e"
+            },
+            margin: {
+                l: 30,
+                r: 30,
+                t: 70,
+                b: 40
+            },
+            paper_bgcolor: "rgba(0,0,0,0)",
+            plot_bgcolor: "rgba(0,0,0,0)",
+            height: 700
+        };
+
+        var config = {
+            responsive: true,
+            displayModeBar: true,
+            modeBarButtonsToRemove: ['pan2d', 'lasso2d', 'select2d'],
+            displaylogo: false
+        };
+
+        Plotly.newPlot('sankeyDiagram', data, layout, config);
+    </script>
+</body>
+</html>
