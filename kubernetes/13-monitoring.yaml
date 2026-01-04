@@ -1,0 +1,22 @@
+# This is an example ServiceMonitor for a Prometheus Operator setup.
+# It assumes the Prometheus Operator is installed and configured to watch
+# for ServiceMonitor resources in the 'police-app' namespace.
+
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: backend-monitor
+  namespace: police-app
+  labels:
+    release: prometheus # Label your Prometheus instance looks for
+spec:
+  selector:
+    matchLabels:
+      app: backend
+  namespaceSelector:
+    matchNames:
+      - police-app
+  endpoints:
+    - port: http # The name of the port in the Service definition
+      interval: 15s
+      path: /metrics # Assuming your app exposes metrics at /metrics

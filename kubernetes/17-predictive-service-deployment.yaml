@@ -1,0 +1,43 @@
+# Gen5: Predictive Analytics Microservice Deployment (Placeholder)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: predictive-service
+  namespace: police-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: predictive-service
+  template:
+    metadata:
+      labels:
+        app: predictive-service
+    spec:
+      containers:
+      - name: predictive-service
+        # In a real system, this would be a dedicated image with ML models
+        image: python:3.9-slim
+        command: ["/bin/sh", "-c"]
+        args: ["while true; do echo 'Predictive service placeholder running'; sleep 3600; done"]
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "512Mi"
+          limits:
+            cpu: "1"
+            memory: "1Gi"
+---
+# Gen5: Predictive Analytics Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: predictive-service
+  namespace: police-app
+spec:
+  selector:
+    app: predictive-service
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080 # Assuming the service would run on 8080

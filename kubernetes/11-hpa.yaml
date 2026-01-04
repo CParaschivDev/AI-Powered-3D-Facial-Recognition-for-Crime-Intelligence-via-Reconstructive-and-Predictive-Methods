@@ -1,0 +1,29 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: backend-hpa
+  namespace: police-app
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: backend
+  minReplicas: 2
+  maxReplicas: 8
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80
+    # To enable GPU-based scaling, you need a custom metrics provider
+    # like Prometheus Adapter configured to expose DCGM metrics.
+    # This is an example of what it would look like.
+    - type: Pods
+      pods:
+        metric:
+          name: dcgm_gpu_utilization # Custom metric from Prometheus
+        target:
+          type: AverageValue
+          averageValue: "85" # Scale up when avg GPU util is > 85%

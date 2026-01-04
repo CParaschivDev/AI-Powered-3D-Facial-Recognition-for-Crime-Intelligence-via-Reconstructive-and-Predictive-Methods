@@ -1,0 +1,47 @@
+# Gen5: Neo4j Deployment for Knowledge Graph
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: neo4j
+  namespace: police-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: neo4j
+  template:
+    metadata:
+      labels:
+        app: neo4j
+    spec:
+      containers:
+      - name: neo4j
+        image: neo4j:5.11
+        ports:
+        - containerPort: 7474
+          name: http
+        - containerPort: 7687
+          name: bolt
+        env:
+        - name: NEO4J_AUTH
+          value: "neo4j/password" # Use secrets in production
+        volumeMounts:
+        - name: neo4j-data
+          mountPath: /data
+      volumes:
+      - name: neo4j-data
+        persistentVolumeClaim:
+          claimName: neo4j-pvc
+---
+# PVC for Neo4j data
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: neo4j-pvc
+  namespace: police-app
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi

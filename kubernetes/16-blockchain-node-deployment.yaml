@@ -1,0 +1,38 @@
+# Gen5: Blockchain Node Deployment (using Ganache for demo)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ganache
+  namespace: police-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ganache
+  template:
+    metadata:
+      labels:
+        app: ganache
+    spec:
+      containers:
+      - name: ganache
+        image: trufflesuite/ganache-cli:v6.12.2
+        args: ["-h", "0.0.0.0"]
+        ports:
+        - containerPort: 8545
+          name: http-rpc
+---
+# Gen5: Blockchain Node Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: ganache
+  namespace: police-app
+spec:
+  selector:
+    app: ganache
+  ports:
+    - name: http-rpc
+      protocol: TCP
+      port: 8545
+      targetPort: 8545
