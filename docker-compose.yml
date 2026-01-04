@@ -1,0 +1,116 @@
+version: '3.8'
+ 
+networks:
+  proxy:
+    name: proxy
+  internal:
+    name: internal
+ 
+services:
+  traefik:
+    image: "traefik:v2.10"
+    container_name: "traefik"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
+      - "--certificatesresolvers.myresolver.acme.email=test@localhost.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080" # Traefik UI
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./letsencrypt:/letsencrypt"
+    networks:
+      - proxy
+ 
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: police_api_backend
+    volumes:
+      - ./backend:/usr/src/app/backend
+    env_file:
+      - .env
+    secrets:
+      - he_context
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      ollama:
+        condition: service_started
+    networks:
+      - proxy
+      - internal
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.backend.rule=Host(`api.localhost`)"
+      - "traefik.http.routers.backend.entrypoints=websecure"
+      - "traefik.http.routers.backend.tls.certresolver=myresolver"
+      - "traefik.http.services.backend.loadbalancer.server.port=8000"
+ 
+  frontend:
+    build:
+      context: ./frontend
+    container_name: police_api_frontend
+    volumes:
+      - ./frontend/src:/app/src
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    networks:
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`app.localhost`)"
+      - "traefik.http.routers.frontend.entrypoints=web"
+      - "traefik.http.services.frontend.loadbalancer.server.port=3000"
+ 
+  db:
+    image: postgres:15-alpine
+    container_name: police_api_db
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    env_file: .env
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  ollama:
+    image: ollama/ollama
+    container_name: police_api_ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    volumes:
+      - ./ollama_data:/root/.ollama
+    networks:
+      - internal
+    ports:
+      - "11434:11434" # Expose Ollama port
+
+secrets:
+  he_context:
+    file: ./secrets/he_context.bin
