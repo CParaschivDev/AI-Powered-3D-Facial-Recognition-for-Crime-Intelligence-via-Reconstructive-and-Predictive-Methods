@@ -1,4 +1,4 @@
-# AI‑Powered 3D Facial Recognition for Crime Intelligence  
+# An AI-Powered 3D Facial Recognition Framework for Crime Intelligence Using Reconstructive and Predictive Techniques
 **Reconstructive + Predictive Techniques (Prototype)**
 
 This repository contains a full‑stack prototype that brings together **3D face reconstruction**, **face recognition**, and **crime analytics/forecasting** behind a FastAPI backend, with a React frontend for investigation workflows (upload → analyze → report).
