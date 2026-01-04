@@ -1,55 +1,65 @@
 # An AI-Powered 3-D Facial Recognition Framework for Crime Intelligence Using Reconstructive and Predictive Techniques
 
-# AI-Powered 3D Facial Recognition for Crime Intelligence (Reconstructive + Predictive)
+This repository contains a full-stack prototype for crime-intelligence workflows combining:
 
-An end-to-end prototype that combines **3D face reconstruction**, **face recognition**, and **crime analytics/forecasting** behind a FastAPI backend, with a React + Three.js frontend for interactive visualisation and reporting.
+- **3D facial reconstruction** (geometry + landmarks)
+- **Face recognition** (embeddings + watchlist/search)
+- **Crime analytics & forecasting** (time series + hotspot/summary views)
+- **Evidence handling** (upload, retrieval, verification endpoints)
+- **Bias + DPIA support** (reporting and assessment endpoints)
+- **Reporting** (PDF report generation)
 
-> Note: This repository contains large assets tracked with **Git LFS** (e.g., `police_face_db.sqlite`). Make sure Git LFS is installed and enabled when cloning.
-
----
-
-## What’s in this project
-
-At a high level, the system is split into:
-
-- **Backend (FastAPI)**  
-  API for authentication, 3D reconstruction, recognition, evidence handling, bias/DPIA reporting, crime analytics, and PDF report generation.
-
-- **Frontend (React + @react-three/fiber)**  
-  UI for uploading images/evidence, viewing results, dashboards, and visual outputs.
-
-- **Data + artifacts**  
-  Local folder structure for datasets, watchlists, embeddings DBs, logs, generated figures, and reports.
-
-- **Ops & deployment**  
-  Docker Compose setup (Traefik + backend + frontend + Postgres) and Kubernetes manifests.
+> Large files (e.g., `police_face_db.sqlite`, model weights) are handled via **Git LFS**.
 
 ---
 
-## Repository structure
+## Table of contents
+- [Project layout](#project-layout)
+- [Tech stack](#tech-stack)
+- [Quick start (local)](#quick-start-local)
+- [Quick start (Docker)](#quick-start-docker)
+- [Configuration (.env)](#configuration-env)
+- [API overview](#api-overview)
+- [Data & model artifacts](#data--model-artifacts)
+- [Training & evaluation](#training--evaluation)
+- [Notes on Git + empty folders](#notes-on-git--empty-folders)
+- [License](#license)
 
-├─ backend/ # FastAPI app, services, models, database logic
-│ ├─ api/ # routes, schemas, main app
-│ ├─ core/ # config, security, utilities
-│ ├─ database/ # SQLAlchemy models + Alembic migrations
-│ ├─ models/ # landmarks, reconstruction, recognition
-│ ├─ orchestration/ # pipeline runners/report generator hooks
-│ └─ services/ # matching, notifications, etc.
+---
+
+## Project layout
+
+> This is intentionally in a code block so GitHub renders it correctly.
+
+```text
+.
+├─ backend/                     FastAPI application (routes, services, DB)
+│  ├─ api/
+│  │  ├─ main.py                FastAPI app entrypoint
+│  │  ├─ routes/                API endpoints (auth, reconstruct, recognize, crime, dpia, bias, evidence, report)
+│  │  └─ models/                Pydantic schemas
+│  ├─ core/                     Config, security, utilities
+│  ├─ database/                 SQLAlchemy + Alembic migrations
+│  ├─ models/                   ML/vision modules (landmarks/reconstruction/recognition)
+│  ├─ orchestration/            Pipeline runners + report generation
+│  └─ services/                 Supporting services (matching, helpers, etc.)
 │
-├─ frontend/ # React app (Three.js / charts / UI)
-│ ├─ src/
-│ └─ public/
+├─ frontend/                    React UI (dashboard, uploads, visualisation)
+│  ├─ src/
+│  └─ public/
 │
-├─ scripts/ # automation + figure generation + diagnostics
-├─ evaluation/ # evaluation scripts for key ML components
-├─ training/ # training scripts for landmark/recognition/reconstruction
-├─ synthetic_data_generator/ # synthetic dataset generation utilities
-├─ docs/ # screenshots, figures, evidence documentation
-├─ reports/ # generated reports/exports
-├─ kubernetes/ # k8s manifests for production-ish deployments
+├─ scripts/                     Automation + diagnostics + figure generation
+├─ evaluation/                  Evaluation scripts for ML components
+├─ training/                    Training scripts for landmarks/recognition/reconstruction
+├─ synthetic_data_generator/    Utilities for synthetic dataset generation
+├─ docs/                        Figures, screenshots, documentation artefacts
+├─ reports/                     Generated exports/reports
+├─ kubernetes/                  K8s manifests (deployment-oriented)
+├─ Data/                        Local data layout (datasets, watchlists, processed outputs)
+├─ logs/                        Training logs + model outputs
 │
-├─ docker-compose.yml # local orchestration
-├─ Dockerfile # backend container build
-├─ alembic.ini # migration configuration
-├─ requirements.txt # backend dependencies
-└─ requirements-dev.txt # dev/test tooling
+├─ docker-compose.yml           Local orchestration
+├─ Dockerfile                   Backend container build
+├─ alembic.ini                  DB migration config
+├─ requirements.txt             Backend dependencies
+└─ requirements-dev.txt         Dev/testing dependencies
