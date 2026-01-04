@@ -22,8 +22,34 @@ At a high level, the system is split into:
   Local folder structure for datasets, watchlists, embeddings DBs, logs, generated figures, and reports.
 
 - **Ops & deployment**  
-  Docker Compose setup (Traefik + backend + frontend + Postgres + Ollama) and Kubernetes manifests.
+  Docker Compose setup (Traefik + backend + frontend + Postgres) and Kubernetes manifests.
 
 ---
 
 ## Repository structure
+
+├─ backend/ # FastAPI app, services, models, database logic
+│ ├─ api/ # routes, schemas, main app
+│ ├─ core/ # config, security, utilities
+│ ├─ database/ # SQLAlchemy models + Alembic migrations
+│ ├─ models/ # landmarks, reconstruction, recognition
+│ ├─ orchestration/ # pipeline runners/report generator hooks
+│ └─ services/ # matching, notifications, etc.
+│
+├─ frontend/ # React app (Three.js / charts / UI)
+│ ├─ src/
+│ └─ public/
+│
+├─ scripts/ # automation + figure generation + diagnostics
+├─ evaluation/ # evaluation scripts for key ML components
+├─ training/ # training scripts for landmark/recognition/reconstruction
+├─ synthetic_data_generator/ # synthetic dataset generation utilities
+├─ docs/ # screenshots, figures, evidence documentation
+├─ reports/ # generated reports/exports
+├─ kubernetes/ # k8s manifests for production-ish deployments
+│
+├─ docker-compose.yml # local orchestration
+├─ Dockerfile # backend container build
+├─ alembic.ini # migration configuration
+├─ requirements.txt # backend dependencies
+└─ requirements-dev.txt # dev/test tooling
