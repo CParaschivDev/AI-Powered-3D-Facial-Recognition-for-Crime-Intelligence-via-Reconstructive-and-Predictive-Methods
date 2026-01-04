@@ -1,0 +1,22 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Shield background -->
+  <path d="M100 10 L180 45 V95 C180 140 145 180 100 190 C55 180 20 140 20 95 V45 Z" 
+        fill="#1e3a8a" stroke="#0a2463" stroke-width="3"/>
+  
+  <!-- Face outline -->
+  <ellipse cx="100" cy="95" rx="50" ry="65" fill="none" stroke="#ffffff" stroke-width="3"/>
+  
+  <!-- Eyes -->
+  <circle cx="80" cy="80" r="7" fill="#ffffff"/>
+  <circle cx="120" cy="80" r="7" fill="#ffffff"/>
+  
+  <!-- Nose -->
+  <path d="M100 90 L100 115 M90 110 L100 115 L110 110" fill="none" stroke="#ffffff" stroke-width="3"/>
+  
+  <!-- Mouth -->
+  <path d="M80 125 Q100 140 120 125" fill="none" stroke="#ffffff" stroke-width="3"/>
+  
+  <!-- Police badge star at top -->
+  <polygon points="100,30 105,40 115,42 107,50 110,60 100,55 90,60 93,50 85,42 95,40" 
+           fill="#ffd700" stroke="#ffffff" stroke-width="1"/>
+</svg>
