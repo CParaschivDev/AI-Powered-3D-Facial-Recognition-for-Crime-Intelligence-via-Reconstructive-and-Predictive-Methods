@@ -63,3 +63,16 @@ This repository contains a full-stack prototype for crime-intelligence workflows
 ├─ alembic.ini                  DB migration config
 ├─ requirements.txt             Backend dependencies
 └─ requirements-dev.txt         Dev/testing dependencies
+
+Tech stack
+Backend
+•	FastAPI + Uvicorn
+•	SQLAlchemy + Alembic (+ Postgres driver)
+•	Torch ecosystem + vision libraries (OpenCV, scikit-image, Pillow)
+•	InsightFace / ONNXRuntime / Ultralytics YOLO (as used by the project code & deps)
+•	Prophet for forecasting
+•	FPDF2 for PDF report generation
+•	Optional integrations in codebase: Neo4j, crypto utilities, etc.
+Frontend
+•	React (react-scripts)
+•	UI components + charts/visualisation (as used in /frontend/src)
