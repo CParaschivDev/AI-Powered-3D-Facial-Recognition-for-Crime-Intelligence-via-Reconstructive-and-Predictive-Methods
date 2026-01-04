@@ -53,8 +53,6 @@ At a high level, the system is split into:
 ├─ requirements.txt # backend dependencies
 └─ requirements-dev.txt # dev/test tooling
 
-markdown
-Copy code
 
 ---
 
