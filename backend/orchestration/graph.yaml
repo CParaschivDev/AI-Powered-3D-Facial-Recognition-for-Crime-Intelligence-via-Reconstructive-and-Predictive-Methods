@@ -1,0 +1,37 @@
+version: 1
+nodes:
+  - id: train_models
+    type: node
+    data:
+      type: tool
+      name: cnn_training_tool
+  - id: generate_data
+    type: node
+    data:
+      type: tool
+      name: synthetic_data_generation_tool
+  - id: reconstruct_3d
+    type: node
+    data:
+      type: tool
+      name: reconstruction_api_tool
+  - id: recognize_identity
+    type: node
+    data:
+      type: tool
+      name: recognition_api_tool
+  - id: report_node
+    type: node
+    data:
+      type: tool
+      name: generate_report_tool
+edges:
+  - from: generate_data
+    to: train_models
+  - from: train_models
+    to: reconstruct_3d
+  - from: reconstruct_3d
+    to: recognize_identity
+  - from: recognize_identity
+    to: report_node
+entry_point: report_node
